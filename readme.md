@@ -3,7 +3,7 @@ SOWComposer is a tool that helps people inside the government write statements o
 
 1. Easy to understand
 2. Discoverable by great businesses
-3. Specific 
+3. Specific
 
 ## What it's designed to do
 
@@ -11,7 +11,7 @@ SOWComposer takes templated statements of work (see the project's _templates dir
 
 In addition, SOWComposer is designed to be educational: to help educate program offices inside of government better understand the technology components of what they're buying when they're crafting a statement of work.
 
-Finally, SOWComposer is designed to be for small purchases -- generally professional services that we think could fall under the Simplified Acquisition Threshold. It's not designed for large RFPs. If you're looking 
+Finally, SOWComposer is designed to be for small purchases -- generally professional services that we think could fall under the Simplified Acquisition Threshold. It's not designed for large RFPs.
 
 ## Where we're at
 
@@ -24,7 +24,16 @@ Also -- if you work for another kind of government -- like a municipal or state 
 ## Who Made This
 This is a project of the Presidential Innovation Fellowship RFP-EZ team including Jed Wood, Adam Becker, and Clay Johnson.
 
-## License
-This is public domain software.
+## Contributing
 
+Federal employees and members of the public are encouraged to contribute to the project by forking and submitting a pull request. (If you are new to GitHub, you might start with a basic tutorial.)
+
+All contributors retain the original copyright to their code, but by contributing to this project, grant a world-wide, royalty-free, perpetual, irrevocable, non-exclusive, transferable license to all users under the terms of the MIT License.
+
+Comments, pull requests and any other messages received through official White House pages are subject to the Presidential Records Act and may be archived. Learn more at http://WhiteHouse.gov/privacy
+
+## License
+This project constitutes an original work of the United States Government.
+
+You may use this project under the [MIT License](http://opensource.org/licenses/mit-license.php).
 
