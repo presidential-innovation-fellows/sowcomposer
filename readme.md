@@ -5,6 +5,26 @@ SOWComposer is a tool that helps people inside the government write statements o
 2. Discoverable by great businesses
 3. Specific
 
+## Easy Setup
+
+1. [Download](https://github.com/presidential-innovation-fellows/sowcomposer/zipball/master) the application
+2. Edit application/config/database.php to suit your needs, and create a database if you need to
+3. Run the necessary migrations:
+
+```shell
+php artisan migrate:install
+php artisan migrate
+```
+
+4. Import the templates
+
+```shell
+php artisan Templateimport
+```
+
+5. Point your webserver's root directory to the `public/` directory
+6. Hit it with your browser.
+
 ## What it's designed to do
 
 SOWComposer takes templated statements of work (see the project's _templates directory) and makes the deliverables and requirements selectable, and makes it so that the statement of work can be "filled out" using a fill-in-the-blanks method. This helps make it so efforts inside government aren't duplicated, and makes it so contracting officers are familiar with the language that's coming out of the tool.
@@ -36,4 +56,3 @@ Comments, pull requests and any other messages received through official White H
 This project constitutes an original work of the United States Government.
 
 You may use this project under the [MIT License](http://opensource.org/licenses/mit-license.php).
-
