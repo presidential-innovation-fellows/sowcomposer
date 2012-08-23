@@ -1,0 +1,32 @@
+Any comments/instructions about the template can go up here, before the divider below. They will NOT be parsed nor saved as part of the public system.
+
+Note: you only have to define all parts of a variable once. For example, once you write {{ AGENCY | Agency | The agency that you work for. }}, the next time you can just write {{AGENCY}} and it will inherit the name and help text.
+
+---TITLE---
+
+Default Title for this SOW
+
+---DELIVERABLES---
+
+# Information Architecture
+
+## This is the help text for the IA deliverable.
+
+### This is the body for the IA deliverable, which will be displayed in the SOW.
+A variable looks like: {{ AGENCY | Agency | The agency that you work for. }}
+
+
+# Something else
+
+## This is the help text for the something else.
+
+### This is the body for the IA deliverable, which will be displayed in the SOW.
+A variable looks like: {{ AGENCY | Agency | The agency that you work for. }}
+
+---REQUIREMENTS---
+
+# Open-sourced project online
+
+## Help text for this requirement
+
+### The {{AGENCY}} {{OFFICE | Office name | What office is requesting this work?}} requests that you have at least one project's code available for public review online.

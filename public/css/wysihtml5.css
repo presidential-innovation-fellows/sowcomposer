@@ -1,0 +1,16 @@
+body {
+  font-family: "Lucida Sans", sans-serif !important; }
+
+h3 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 22px; }
+
+p, div, span {
+  margin-bottom: 15px !important;
+  font-size: 13px !important;
+  line-height: 17px !important; }
+
+table {
+  width: auto !important;
+  min-width: 300px; }
