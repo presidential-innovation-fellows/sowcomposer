@@ -7,23 +7,23 @@ SOWComposer is a tool that helps people inside the government write statements o
 
 ## Easy Setup
 
-1. [Download](https://github.com/presidential-innovation-fellows/sowcomposer/zipball/master) the application
-2. Edit application/config/database.php to suit your needs, and create a database if you need to
-3. Run the necessary migrations:
+- [Download](https://github.com/presidential-innovation-fellows/sowcomposer/zipball/master) the application
+- Edit application/config/database.php to suit your needs, and create a database if you need to
+- Run the necessary migrations:
 
 ```shell
 php artisan migrate:install
 php artisan migrate
 ```
 
-4. Import the templates
+- Import the templates
 
 ```shell
 php artisan Templateimport
 ```
 
-5. Point your webserver's root directory to the `public/` directory
-6. Hit it with your browser.
+- Point your webserver's root directory to the `public/` directory
+- Hit it with your browser.
 
 ## What it's designed to do
 
