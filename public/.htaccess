@@ -21,3 +21,8 @@
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^(.*)$ index.php/$1 [L]
 </IfModule>
+
+AuthUserFile /var/www/.htpasswd
+AuthType Basic
+AuthName "SOW Composer Demo"
+Require valid-user
