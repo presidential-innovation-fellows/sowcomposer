@@ -1,10 +1,21 @@
 This is a web site template!
 
-Todo: requirements.
-
 ---TITLE---
 
 Web Design
+
+---Custom Header---
+
+--This is the helper/description that would show up for this section--
+
+# Title for a section
+
+### Lengthy information about this section.
+
+# Title for another section
+
+### More lengthy information about this section.
+
 
 ---DELIVERABLES---
 
@@ -43,6 +54,8 @@ Note that this deliverable may be subject to multiple rounds of revisions. {{WEB
 
 
 ---REQUIREMENTS---
+
+--This is the helper/description that would show up for this section--
 
 # Open-sourced project online
 

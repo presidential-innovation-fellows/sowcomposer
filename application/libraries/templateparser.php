@@ -5,24 +5,35 @@ class Templateparser {
     public static function parse($raw_template)
     {
       //High-level blocks
-      $blocks = preg_split('/\-\-\-(\w+)\-\-\-/', $raw_template, -1, PREG_SPLIT_DELIM_CAPTURE);
+      $blocks = preg_split('/\-\-\-(.+)\-\-\-/', $raw_template, -1, PREG_SPLIT_DELIM_CAPTURE);
       $trimmed_blocks = array_map('trim', $blocks);
 
       $tp = new Template();
       $tp->title = $trimmed_blocks[2];
 
-      $blocks = array_slice($trimmed_blocks, 4);
+      $blocks = array_slice($trimmed_blocks, 3);
 
-      $section_type = "deliverable";
       $ord = 0;
       $vars = array();
 
+      $section_type = '';
+
       foreach($blocks as $block) {
-        if ($block == "REQUIREMENTS") {
-          $section_type = "requirement";
+        //is this a header or a text block?
+        if (preg_match('/^\w/', $block)) {
+          $section_type = $block;
           continue;
         }
+
         $bits = preg_split('/(^#|[\r\n]+#)\s/', $block, -1, PREG_SPLIT_NO_EMPTY);
+        //This is getting a little messy, but check if there's a description/helper before the sections
+        preg_match('/\-\-(.+)\-\-/', $bits[0], $helpertexts);
+
+        if ($helpertexts) {
+          $vars[$section_type] = $helpertexts[1];
+          array_shift($bits);
+        }
+
         foreach($bits as $bit) {
           $ts = new TemplateSection();
           $sec_bits = preg_split('/[\r\n]#{2,3}/', $bit);
