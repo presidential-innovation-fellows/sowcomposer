@@ -2,33 +2,37 @@
 
 <div class="step step-3">
 
-  <h2 class="step-title">Step 3 - Deliverables and Timeline</h2>
+  <h2 class="step-title"><?= $section_type ?></h2>
 
-  <div class="alert alert-info">
-    Pick and choose what you need delivered to you in this project. If you don't see something you need, add it and you can incorporate the text later.
-    You can also select dates when you'd like for these projects to start and end to give bidders a good idea of the pacing of your project. Leave items as TBD if you want to negotiate dates with your vendor. 
-  </div>
+  <?php if ($help_text = $sow->template->get_variable($section_type)): ?>
+    <div class="alert alert-info">
+      <?= $help_text ?>
+    </div>
+  <?php endif; ?>
 
-
-  <form class="form-horizontal form-deliverables" method="POST" action="<?= route('step3_post', array($sow->uuid)) ?>">
+  <form class="form-horizontal form-sections" method="POST" action="<?= route('step3_post', array($sow->uuid, $section_type)) ?>">
 
     <?php $today = date('n/j/y'); ?>
 
-    <?php foreach($deliverables as $deliverable): ?>
+    <?php foreach($sections as $section): ?>
       <div class="control-group">
         <div class="controls">
           <label class="checkbox">
-            <input type="checkbox" value="<?= $deliverable->id ?>"
-                   name="deliverables[]" class="deliverable-toggle" <?= $deliverable->in_sow($sow) ? "checked" : "" ?>>
-            <span class="checkbox-tooltip" title="<?= $deliverable->help_text ?>"><?= $deliverable->title ?></span>
+            <input type="checkbox" value="<?= $section->id ?>"
+                   name="sections[]" class="section-toggle" <?= $section->in_sow($sow) ? "checked" : "" ?>>
+            <span class="checkbox-tooltip" title="<?= $section->help_text ?>"><?= $section->title ?></span>
           </label>
-          <span class="input-append date datepicker"
-                data-date="<?= $today ?>" data-date-format="m/d/yy">
-            Due Date:
-            <input size="16" type="text" value="<?= $deliverable->in_sow($sow) ? $sow->due_date($deliverable) : $today ?>"
-                   name="deliverable_dates[]" disabled><span class="add-on"><i class="icon-calendar"></i></span>
-          </span>
-          <label class="tbd"><input class="tbd-checkbox" type="checkbox" /> TBD</label>
+
+          <?php if ($section_type == "Deliverables"): ?>
+            <span class="input-append date datepicker"
+                  data-date="<?= $today ?>" data-date-format="m/d/yy">
+              Due Date:
+              <input size="16" type="text" value="<?= $section->in_sow($sow) ? $sow->due_date($section) : $today ?>"
+                     name="deliverable_dates[]" disabled><span class="add-on"><i class="icon-calendar"></i></span>
+            </span>
+            <label class="tbd"><input class="tbd-checkbox" type="checkbox" /> TBD</label>
+          <?php endif; ?>
+
         </div>
       </div>
     <?php endforeach; ?>
@@ -37,28 +41,36 @@
       <li class="template clearfix">
         <div class="choice-name">
           <span></span>
-          <input type="hidden" disabled name="custom_deliverables[]" />
+          <input type="hidden" disabled name="custom_sections[]" />
           <a>(remove)</a>
         </div>
-        <span class="input-append date datepicker" data-date="<?= $today ?>" data-date-format="m/d/yy">
-          Due Date:
-          <input size="16" type="text" value="<?= $today ?>" disabled name="custom_deliverable_dates[]"><span class="add-on"><i class="icon-calendar"></i></span>
-        </span>
-        <label class="tbd"><input class="tbd-checkbox" type="checkbox" /> TBD</label>
-      </li>
-      <?php foreach($custom_deliverables as $custom_deliverable): ?>
-        <li class="clearfix">
-          <div class="choice-name">
-            <span><?= $custom_deliverable->title ?></span>
-            <input type="hidden" name="custom_deliverables[]" value="<?= $custom_deliverable->title ?>" />
-            <input type="hidden" name="custom_deliverable_bodies[]" value="<?= $custom_deliverable->body ?>" />
-            <a>(remove)</a>
-          </div>
-          <span class="input-append date datepicker" data-date="<?= $sow->due_date($custom_deliverable) ?>" data-date-format="m/d/yy">
+
+        <?php if ($section_type == "Deliverables"): ?>
+          <span class="input-append date datepicker" data-date="<?= $today ?>" data-date-format="m/d/yy">
             Due Date:
-            <input size="16" type="text" value="<?= $sow->due_date($custom_deliverable) ?>" name="custom_deliverable_dates[]"><span class="add-on"><i class="icon-calendar"></i></span>
+            <input size="16" type="text" value="<?= $today ?>" disabled name="custom_deliverable_dates[]"><span class="add-on"><i class="icon-calendar"></i></span>
           </span>
           <label class="tbd"><input class="tbd-checkbox" type="checkbox" /> TBD</label>
+        <?php endif; ?>
+
+      </li>
+      <?php foreach($custom_sections as $custom_section): ?>
+        <li class="clearfix">
+          <div class="choice-name">
+            <span><?= $custom_section->title ?></span>
+            <input type="hidden" name="custom_sections[]" value="<?= $custom_section->title ?>" />
+            <input type="hidden" name="custom_section_bodies[]" value="<?= $custom_section->body ?>" />
+            <a>(remove)</a>
+          </div>
+
+          <?php if ($section_type == "Deliverables"): ?>
+            <span class="input-append date datepicker" data-date="<?= $sow->due_date($custom_section) ?>" data-date-format="m/d/yy">
+              Due Date:
+              <input size="16" type="text" value="<?= $sow->due_date($custom_section) ?>" name="custom_deliverable_dates[]"><span class="add-on"><i class="icon-calendar"></i></span>
+            </span>
+            <label class="tbd"><input class="tbd-checkbox" type="checkbox" /> TBD</label>
+          <?php endif; ?>
+
         </li>
       <?php endforeach; ?>
     </ul>
@@ -71,8 +83,20 @@
     </div>
 
     <div class="bottom-controls well">
-      <a class="btn" href="<?= route('step2', array($sow->uuid)) ?>">&larr; Background &amp; Scope</a>
-      <button class="btn btn-primary pull-right">Requirements &rarr;</button>
+      <?php if ($previous_template_section_type = $sow->template_section_type_before($section_type)): ?>
+        <a class="btn" href="<?= route('step3', array($sow->uuid, $previous_template_section_type)) ?>">&larr; <?= $previous_template_section_type ?></a>
+      <?php else: ?>
+        <a class="btn" href="<?= route('step2', array($sow->uuid)) ?>">&larr; Background &amp; Scope</a>
+      <?php endif; ?>
+
+      <button class="btn btn-primary pull-right">
+        <?php if ($next_template_section_type = $sow->template_section_type_after($section_type)): ?>
+          <?= $next_template_section_type ?>
+        <?php else: ?>
+          Fill in Variables
+        <?php endif; ?>
+        &rarr;
+      </button>
     </div>
 
   </form>

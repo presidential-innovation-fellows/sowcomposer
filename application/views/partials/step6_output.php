@@ -1,48 +1,45 @@
 <?php
-  $deliverables = $sow->deliverables();
+  $deliverables = $sow->sections('Deliverables');
 ?>
 
-<h3>Background & Scope</h3>
-<p>
-  <?= $sow->background_and_scope() ?>
-</p>
-
-<?php $i = 1; foreach($deliverables as $deliverable): ?>
-  <h3>Deliverable Product #<?= $i ?>: <?= $deliverable->best_title() ?></h3>
+<?php if ($sow->background_and_scope()): ?>
+  <h3>Background & Scope</h3>
   <p>
-    <?php if ($deliverable->template_section): ?>
-      <?= $deliverable->template_section->body ?>
-    <?php else: ?>
-      <?= $deliverable->body ?>
-    <?php endif; ?>
+    <?= $sow->background_and_scope() ?>
   </p>
-<?php ++$i; endforeach; ?>
+<?php endif; ?>
 
-<?php $i = 1; foreach($sow->requirements() as $requirement): ?>
-  <h3>Requirement #<?= $i ?>: <?= $requirement->best_title() ?></h3>
-  <p>
-    <?php if ($requirement->template_section): ?>
-      <?= $requirement->template_section->body ?>
-    <?php else: ?>
-      <?= $requirement->body ?>
-    <?php endif; ?>
-  </p>
-<?php ++$i; endforeach; ?>
+<?php foreach($sow->sow_section_types() as $section_type): ?>
+  <h3><?= $section_type ?></h3>
+  <?php $i = 1; foreach($sow->sections($section_type) as $section): ?>
+    <h4><?= $i ?>) <?= $section->best_title() ?></h4>
+    <p>
+      <?php if ($section->template_section): ?>
+        <?= $section->template_section->body ?>
+      <?php else: ?>
+        <?= $section->body ?>
+      <?php endif; ?>
+    </p>
+  <?php ++$i; endforeach; ?>
+<?php endforeach; ?>
 
-<h3>Timeline</h3>
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Deliverable</th>
-      <th>Due Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach($deliverables as $deliverable): ?>
+
+<?php if(count($deliverables) > 0): ?>
+  <h3>Timeline</h3>
+  <table class="table table-bordered">
+    <thead>
       <tr>
-        <td><?= $deliverable->best_title() ?></td>
-        <td><?= $sow->due_date($deliverable) ? $sow->due_date($deliverable) : "TBD" ?></td>
+        <th>Deliverable</th>
+        <th>Due Date</th>
       </tr>
-    <?php endforeach; ?>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <?php foreach($deliverables as $deliverable): ?>
+        <tr>
+          <td><?= $deliverable->best_title() ?></td>
+          <td><?= $sow->due_date($deliverable) ? $sow->due_date($deliverable) : "TBD" ?></td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+<?php endif; ?>

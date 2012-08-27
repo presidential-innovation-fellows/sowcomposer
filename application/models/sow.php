@@ -46,23 +46,85 @@ class Sow extends Eloquent {
     }
   }
 
-  public function deliverables() {
-    $deliverables = $this->sow_sections()->where('section_type', '=', 'Deliverable')->get();
-    $variables = $this->variables;
+  public function sections($section_type) {
 
-    uasort($deliverables, function($a, $b) use ($variables) {
-      if ($variables["DELIVERABLE_" . Sow::variablize($a->best_title()) . "_DUE"]) return false;
-      if ($variables["DELIVERABLE_" . Sow::variablize($b->best_title()) . "_DUE"]) return true;
+    if ($section_type == "Deliverables") {
 
-      return strtotime($variables["DELIVERABLE_" . Sow::variablize($a->best_title()) . "_DUE"]) >
-             strtotime($variables["DELIVERABLE_" . Sow::variablize($b->best_title()) . "_DUE"]);
-    });
+      $deliverables = $this->sow_sections()->where('section_type', '=', 'Deliverables')->get();
+      $variables = $this->variables;
 
-    return $deliverables;
+      uasort($deliverables, function($a, $b) use ($variables) {
+        if (!$variables["DELIVERABLE_" . Sow::variablize($a->best_title()) . "_DUE"]) return false;
+        if (!$variables["DELIVERABLE_" . Sow::variablize($b->best_title()) . "_DUE"]) return true;
+
+        return strtotime($variables["DELIVERABLE_" . Sow::variablize($a->best_title()) . "_DUE"]) >
+               strtotime($variables["DELIVERABLE_" . Sow::variablize($b->best_title()) . "_DUE"]);
+      });
+
+      return $deliverables;
+
+    } else {
+      return $this->sow_sections()->where('section_type', '=', $section_type)->get();
+    }
+
   }
 
-  public function requirements() {
-    return $this->sow_sections()->where('section_type', '=', 'Requirement')->get();
+  public function sow_section_types() {
+    $types = array();
+    $query = DB::query("SELECT section_type
+                        FROM sow_sections
+                        WHERE section_type != 'Background & Scope'
+                        AND sow_id = ?
+                        GROUP BY section_type", array($this->id));
+
+    foreach($query as $type) {
+      $types[] = $type->section_type;
+    }
+
+    return $types;
+  }
+
+  public function template_section_types() {
+    $types = array();
+    $query = DB::query("SELECT section_type
+                        FROM template_sections
+                        WHERE template_id = ?
+                        GROUP BY section_type
+                        ORDER BY display_order", array($this->based_on_template_id));
+
+    foreach($query as $type) {
+      $types[] = $type->section_type;
+    }
+
+    return $types;
+  }
+
+  public function first_template_section_type() {
+    $types = $this->template_section_types();
+    return $types[0];
+  }
+
+  public function last_template_section_type() {
+    $types = $this->template_section_types();
+    return $types[count($types) - 1];
+  }
+
+  public function template_section_type_after($section_type) {
+    return $this->template_section_type_sequential(1, $section_type);
+  }
+
+  public function template_section_type_before($section_type) {
+    return $this->template_section_type_sequential(-1, $section_type);
+  }
+
+  public function template_section_type_sequential($direction, $section_type) {
+    $types = $this->template_section_types();
+    $index = array_search($section_type, $types);
+    if (isset($types[$index + $direction])){
+      return $types[$index + $direction];
+    } else {
+      return false;
+    }
   }
 
   public function due_date($deliverable) {

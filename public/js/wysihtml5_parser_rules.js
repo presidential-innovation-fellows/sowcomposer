@@ -12,6 +12,7 @@ var wysihtml5ParserRules = {
     ol:     {},
     li:     {},
     h3:     {},
+    h4:     {},
     table:  {
       set_attributes: {
         class: "table"
