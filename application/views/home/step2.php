@@ -3,7 +3,7 @@
 <div class="step step-2">
   <form method="POST" action="<?= route('step2_post', array($sow->uuid)) ?>">
 
-    <h2 class="step-title">Step 2 - Background &amp; Scope</h2>
+    <h2 class="step-title">Background &amp; Scope</h2>
 
     <div class="row">
       <div class="span8">
@@ -38,8 +38,8 @@
     </div>
 
     <div class="bottom-controls well">
-      <a class="btn" href="/">&larr; Back to Step 1</a>
-      <button class="btn btn-primary pull-right">Deliverables &rarr;</button>
+      <a class="btn" href="/">&larr; Start Over</a>
+      <button class="btn btn-primary pull-right"><?= $sow->first_template_section_type() ?> &rarr;</button>
     </div>
   </form>
 </div>

@@ -6,7 +6,7 @@ class Home_Controller extends Base_Controller {
 		parent::__construct();
 
 		$this->filter('before', 'sow_exists')->only(array('step2', 'step2_post', 'step3', 'step3_post',
-																										  'step4', 'step4_post', 'step5', 'step5_post',
+																										  'step5', 'step5_post',
 																										  'step6', 'step6_post', 'step7',
 
 																										  'doc', 'print'));
@@ -59,108 +59,72 @@ class Home_Controller extends Base_Controller {
 															 'body' => Input::get('body')));
 		}
 
-		return Redirect::to(route('step3', array($sow->uuid)));
+		return Redirect::to(route('step3', array($sow->uuid, rawurlencode($sow->first_template_section_type()))));
 	}
 
-	public function action_step3() {
+	public function action_step3($uuid, $section_type) {
 		$view = View::make('home.step3');
 		$view->sow = Config::get('sow');
-		$view->deliverables = TemplateSection::where('template_id', '=', $view->sow->based_on_template_id)
-																				 ->where('section_type', '=', 'Deliverable')
-																				 ->get();
+		$view->section_type = $section_type;
+		$view->sections = TemplateSection::where('template_id', '=', $view->sow->based_on_template_id)
+																		 ->where('section_type', '=', $section_type)
+																		 ->get();
 
-		$view->custom_deliverables = $view->sow->sow_sections()->where('section_type', '=', 'Deliverable')
-																												   ->where_null('based_on_template_section_id')
-																												   ->get();
+		$view->custom_sections = $view->sow->sow_sections()->where('section_type', '=', $section_type)
+																											 ->where_null('based_on_template_section_id')
+																											 ->get();
 		$this->layout->content = $view;
 	}
 
-	public function action_step3_post() {
+	public function action_step3_post($uuid, $section_type) {
 		$sow = Config::get('sow');
-		foreach ($sow->deliverables() as $deliverable) { $deliverable->delete(); }
+		foreach ($sow->sections($section_type) as $section) { $section->delete(); }
 
-		if (Input::get('deliverables')) {
+		if (Input::get('sections')) {
 			$i = 0;
 			$deliverable_dates = Input::get('deliverable_dates');
-			foreach(Input::get('deliverables') as $deliverable_id) {
-				$deliverable = TemplateSection::find($deliverable_id);
+			foreach(Input::get('sections') as $section_id) {
+				$section = TemplateSection::find($section_id);
 				SowSection::create(array('sow_id' => $sow->id,
-																 'section_type' => 'Deliverable',
-																 'based_on_template_section_id' => $deliverable->id,
+																 'section_type' => $section->section_type,
+																 'based_on_template_section_id' => $section->id,
 																 'display_order' => $i));
 
-				$sow->add_variable("DELIVERABLE_" . Sow::variablize($deliverable->title) . "_DUE", $deliverable_dates[$i]);
+				if (count($deliverable_dates) > 0){
+					$sow->add_variable("DELIVERABLE_" . Sow::variablize($section->title) . "_DUE", $deliverable_dates[$i]);
+				}
+
 				++$i;
 			}
 		}
 
-		if (Input::get('custom_deliverables')) {
+		if (Input::get('custom_sections')) {
 			$i = 0;
 			$custom_deliverable_dates = Input::get('custom_deliverable_dates');
-			foreach(Input::get('custom_deliverables') as $custom_deliverable_name) {
-				$custom_bodies = Input::get("custom_deliverable_bodies");
+			foreach(Input::get('custom_sections') as $custom_section_name) {
+				$custom_bodies = Input::get("custom_section_bodies");
 				$body = $custom_bodies[$i];
 				if (!$body) $body = "";
 				SowSection::create(array('sow_id' => $sow->id,
-																 'section_type' => 'Deliverable',
-																 'title' => $custom_deliverable_name,
+																 'section_type' => $section_type,
+																 'title' => $custom_section_name,
 																 'display_order' => $i,
 																 'body' => $body));
 
-				$sow->add_variable("DELIVERABLE_" . Sow::variablize($custom_deliverable_name) . "_DUE", $custom_deliverable_dates[$i]);
+				if (count($custom_deliverable_dates) > 0) {
+					$sow->add_variable("DELIVERABLE_" . Sow::variablize($custom_section_name) . "_DUE", $custom_deliverable_dates[$i]);
+				}
 				++$i;
 			}
 		}
 
 		$sow->save();
-		return Redirect::to(route('step4', array($sow->uuid)));
-	}
 
-	public function action_step4() {
-		$view = View::make('home.step4');
-		$view->sow = Config::get('sow');
-		$view->requirements = TemplateSection::where('template_id', '=', $view->sow->based_on_template_id)
-																				 ->where('section_type', '=', 'Requirement')
-																				 ->get();
-
-		$view->custom_requirements = $view->sow->sow_sections()->where('section_type', '=', 'Requirement')
-																												   ->where_null('based_on_template_section_id')
-																												   ->get();
-
-		$this->layout->content = $view;
-	}
-
-	public function action_step4_post() {
-		$sow = Config::get('sow');
-		foreach ($sow->requirements() as $requirement) { $requirement->delete(); }
-
-		if (Input::get('requirements')) {
-			$i = 0;
-			foreach(Input::get('requirements') as $requirement_id) {
-				SowSection::create(array('sow_id' => $sow->id,
-																 'section_type' => 'Requirement',
-																 'based_on_template_section_id' => $requirement_id,
-																 'display_order' => $i));
-				++$i;
-			}
+		if ($next_section_type = $sow->template_section_type_after($section_type)) {
+			return Redirect::to(route('step3', array($sow->uuid, $next_section_type)));
+		} else {
+			return Redirect::to(route('step5', array($sow->uuid)));
 		}
-
-		if (Input::get('custom_requirements')) {
-			$i = 0;
-			foreach(Input::get('custom_requirements') as $custom_requirement_name) {
-				$custom_bodies = Input::get("custom_requirement_bodies");
-				$body = $custom_bodies[$i];
-				if (!$body) $body = "";
-				SowSection::create(array('sow_id' => $sow->id,
-																 'section_type' => 'Requirement',
-																 'title' => $custom_requirement_name,
-																 'display_order' => $i,
-																 'body' => $body));
-				++$i;
-			}
-		}
-
-		return Redirect::to(route('step5', array($sow->uuid)));
 	}
 
 	public function action_step5() {

@@ -1,12 +1,23 @@
 This is a web site template!
 
-Todo: requirements.
-
 ---TITLE---
 
 Web Design
 
----DELIVERABLES---
+---Custom Section---
+
+--This is the helper/description that would show up for this section--
+
+# Title for a section
+
+### Lengthy information about this section.
+
+# Title for another section
+
+### More lengthy information about this section.
+
+
+---Deliverables---
 
 # Existing Audience Analysis
 
@@ -42,7 +53,9 @@ Note that this deliverable may be subject to multiple rounds of revisions. {{WEB
 ### Brand guidelines; a comprehensive manual for {{AGENCY | Agency | The agency you belong to.}} staff outlining the specifications and recommended use of all creative to develop and maintain the new corporate identity.
 
 
----REQUIREMENTS---
+---Requirements---
+
+--This is the helper/description that would show up for this section--
 
 # Open-sourced project online
 
