@@ -59,7 +59,7 @@ class Home_Controller extends Base_Controller {
 															 'body' => Input::get('body')));
 		}
 
-		return Redirect::to(route('step3', array($sow->uuid, $sow->first_template_section_type())));
+		return Redirect::to(route('step3', array($sow->uuid, rawurlencode($sow->first_template_section_type()))));
 	}
 
 	public function action_step3($uuid, $section_type) {
