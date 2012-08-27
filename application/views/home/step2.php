@@ -38,7 +38,7 @@
     </div>
 
     <div class="bottom-controls well">
-      <a class="btn" href="/">&larr; Back to Step 1</a>
+      <a class="btn" href="/">&larr; Start Over</a>
       <button class="btn btn-primary pull-right"><?= $sow->first_template_section_type() ?> &rarr;</button>
     </div>
   </form>
