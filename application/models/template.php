@@ -7,6 +7,10 @@ class Template extends Eloquent {
     return $this->has_many('TemplateSection');
   }
 
+  public function get_variable($key) {
+    return isset($this->variables[$key]) ? $this->variables[$key] : "";
+  }
+
   public function get_variables() {
     return json_decode($this->get_attribute('variables'), true);
   }

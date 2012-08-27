@@ -4,11 +4,11 @@
 
   <h2 class="step-title"><?= $section_type ?></h2>
 
-  <div class="alert alert-info">
-    Pick and choose what you need delivered to you in this project. If you don't see something you need, add it and you can incorporate the text later.
-    You can also select dates when you'd like for these projects to start and end to give bidders a good idea of the pacing of your project. Leave items as TBD if you want to negotiate dates with your vendor.
-  </div>
-
+  <?php if ($help_text = $sow->template->get_variable($section_type)): ?>
+    <div class="alert alert-info">
+      <?= $help_text ?>
+    </div>
+  <?php endif; ?>
 
   <form class="form-horizontal form-sections" method="POST" action="<?= route('step3_post', array($sow->uuid, $section_type)) ?>">
 
