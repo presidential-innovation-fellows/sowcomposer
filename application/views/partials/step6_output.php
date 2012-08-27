@@ -1,5 +1,5 @@
 <?php
-  $deliverables = $sow->deliverables();
+  $deliverables = $sow->sections('Deliverables');
 ?>
 
 <h3>Background & Scope</h3>
@@ -7,27 +7,20 @@
   <?= $sow->background_and_scope() ?>
 </p>
 
-<?php $i = 1; foreach($deliverables as $deliverable): ?>
-  <h3>Deliverable Product #<?= $i ?>: <?= $deliverable->best_title() ?></h3>
-  <p>
-    <?php if ($deliverable->template_section): ?>
-      <?= $deliverable->template_section->body ?>
-    <?php else: ?>
-      <?= $deliverable->body ?>
-    <?php endif; ?>
-  </p>
-<?php ++$i; endforeach; ?>
+<?php foreach($sow->sow_section_types() as $section_type): ?>
+  <h3><?= $section_type ?></h3>
+  <?php $i = 1; foreach($sow->sections($section_type) as $section): ?>
+    <h4><?= $i ?>) <?= $section->best_title() ?></h4>
+    <p>
+      <?php if ($section->template_section): ?>
+        <?= $section->template_section->body ?>
+      <?php else: ?>
+        <?= $section->body ?>
+      <?php endif; ?>
+    </p>
+  <?php ++$i; endforeach; ?>
+<?php endforeach; ?>
 
-<?php $i = 1; foreach($sow->requirements() as $requirement): ?>
-  <h3>Requirement #<?= $i ?>: <?= $requirement->best_title() ?></h3>
-  <p>
-    <?php if ($requirement->template_section): ?>
-      <?= $requirement->template_section->body ?>
-    <?php else: ?>
-      <?= $requirement->body ?>
-    <?php endif; ?>
-  </p>
-<?php ++$i; endforeach; ?>
 
 <h3>Timeline</h3>
 <table class="table table-bordered">

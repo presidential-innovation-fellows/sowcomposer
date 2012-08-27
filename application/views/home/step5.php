@@ -4,7 +4,7 @@
 
   <form method="POST" action="<?= route('step5_post', array($sow->uuid)) ?>">
 
-    <h2 class="step-title">Step 5 - Fill out your SOW</h2>
+    <h2 class="step-title">Fill out your SOW</h2>
 
     <div class="alert alert-info">
       Fill in the blanks below and we'll assemble your final document, which you can edit in the next step.
@@ -24,7 +24,8 @@
     </div>
 
     <div class="bottom-controls well">
-      <a class="btn" href="<?= route('step4', array($sow->uuid)) ?>">&larr; Requirements</a>
+      <?php $last_template_section_type = $sow->last_template_section_type(); ?>
+      <a class="btn" href="<?= route('step3', array($sow->uuid, $last_template_section_type)) ?>">&larr; <?= $last_template_section_type ?></a>
       <button class="btn btn-primary pull-right">Edit Document &rarr;</button>
     </div>
 
