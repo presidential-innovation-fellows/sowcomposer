@@ -2,10 +2,12 @@
   $deliverables = $sow->sections('Deliverables');
 ?>
 
-<h3>Background & Scope</h3>
-<p>
-  <?= $sow->background_and_scope() ?>
-</p>
+<?php if ($sow->background_and_scope()): ?>
+  <h3>Background & Scope</h3>
+  <p>
+    <?= $sow->background_and_scope() ?>
+  </p>
+<?php endif; ?>
 
 <?php foreach($sow->sow_section_types() as $section_type): ?>
   <h3><?= $section_type ?></h3>
@@ -22,20 +24,22 @@
 <?php endforeach; ?>
 
 
-<h3>Timeline</h3>
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Deliverable</th>
-      <th>Due Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach($deliverables as $deliverable): ?>
+<?php if(count($deliverables) > 0): ?>
+  <h3>Timeline</h3>
+  <table class="table table-bordered">
+    <thead>
       <tr>
-        <td><?= $deliverable->best_title() ?></td>
-        <td><?= $sow->due_date($deliverable) ? $sow->due_date($deliverable) : "TBD" ?></td>
+        <th>Deliverable</th>
+        <th>Due Date</th>
       </tr>
-    <?php endforeach; ?>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <?php foreach($deliverables as $deliverable): ?>
+        <tr>
+          <td><?= $deliverable->best_title() ?></td>
+          <td><?= $sow->due_date($deliverable) ? $sow->due_date($deliverable) : "TBD" ?></td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+<?php endif; ?>
