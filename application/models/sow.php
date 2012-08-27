@@ -54,8 +54,8 @@ class Sow extends Eloquent {
       $variables = $this->variables;
 
       uasort($deliverables, function($a, $b) use ($variables) {
-        if ($variables["DELIVERABLE_" . Sow::variablize($a->best_title()) . "_DUE"]) return false;
-        if ($variables["DELIVERABLE_" . Sow::variablize($b->best_title()) . "_DUE"]) return true;
+        if (!$variables["DELIVERABLE_" . Sow::variablize($a->best_title()) . "_DUE"]) return false;
+        if (!$variables["DELIVERABLE_" . Sow::variablize($b->best_title()) . "_DUE"]) return true;
 
         return strtotime($variables["DELIVERABLE_" . Sow::variablize($a->best_title()) . "_DUE"]) >
                strtotime($variables["DELIVERABLE_" . Sow::variablize($b->best_title()) . "_DUE"]);
