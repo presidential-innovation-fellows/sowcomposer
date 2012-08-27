@@ -8,7 +8,7 @@
     $(document).on('changeDate', ".datepicker", function() {
       return $(this).closest(".controls, li").find(".tbd-checkbox").attr('checked', false);
     });
-    $(".form-deliverables input.deliverable-toggle:checked").each(function() {
+    $(".form-sections input.section-toggle:checked").each(function() {
       return $(this).closest(".control-group").addClass("checked").find("input[disabled]").removeAttr('disabled');
     });
     $(".datepicker input").each(function() {
@@ -81,7 +81,7 @@
     });
   });
 
-  $(document).on("click", ".form-deliverables input.deliverable-toggle", function() {
+  $(document).on("click", ".form-sections input.section-toggle", function() {
     if (this.checked) {
       return $(this).closest(".control-group").addClass("checked").find("input[disabled]").removeAttr('disabled');
     } else {

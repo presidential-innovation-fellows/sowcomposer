@@ -2,7 +2,7 @@
 
 <div class="step step-6">
   <form method="POST" action="<?= route('step6_post', array($sow->uuid)) ?>">
-    <h2 class="step-title">Step 6 - Edit Document Text</h2>
+    <h2 class="step-title">Edit Document Text</h2>
 
     <textarea id="sow-content-wysiwyg" name="body" style="width: 100%; min-height: 400px">
       <?= VariableParser::parse(View::make('partials.step6_output')->with('sow', $sow), $sow, "read") ?>

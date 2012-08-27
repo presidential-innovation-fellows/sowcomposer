@@ -38,11 +38,8 @@ Route::post('step1', array('uses' => 'home@step1_post', 'as' => 'step1_post'));
 Route::get('(:any)/step2', array('uses' => 'home@step2', 'as' => 'step2'));
 Route::post('(:any)/step2', array('uses' => 'home@step2_post', 'as' => 'step2_post'));
 
-Route::get('(:any)/step3', array('uses' => 'home@step3', 'as' => 'step3'));
-Route::post('(:any)/step3', array('uses' => 'home@step3_post', 'as' => 'step3_post'));
-
-Route::get('(:any)/step4', array('uses' => 'home@step4', 'as' => 'step4'));
-Route::post('(:any)/step4', array('uses' => 'home@step4_post', 'as' => 'step4_post'));
+Route::get('(:any)/step3/(:any)', array('uses' => 'home@step3', 'as' => 'step3'));
+Route::post('(:any)/step3/(:any)', array('uses' => 'home@step3_post', 'as' => 'step3_post'));
 
 Route::get('(:any)/step5', array('uses' => 'home@step5', 'as' => 'step5'));
 Route::post('(:any)/step5', array('uses' => 'home@step5_post', 'as' => 'step5_post'));

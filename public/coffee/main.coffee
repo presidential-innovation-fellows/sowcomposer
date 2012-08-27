@@ -5,7 +5,7 @@ $ ->
   $(document).on 'changeDate', ".datepicker", ->
     $(this).closest(".controls, li").find(".tbd-checkbox").attr('checked', false)
 
-  $(".form-deliverables input.deliverable-toggle:checked").each ->
+  $(".form-sections input.section-toggle:checked").each ->
     $(this).closest(".control-group")
            .addClass("checked")
            .find("input[disabled]")
@@ -64,7 +64,7 @@ $(document).on "input blur", ".sow-content p input[type=text]", (e) ->
     $(this).val(variableValue)
     $(this).trigger("input.autogrow")
 
-$(document).on "click", ".form-deliverables input.deliverable-toggle", ->
+$(document).on "click", ".form-sections input.section-toggle", ->
   if this.checked
     $(this).closest(".control-group")
            .addClass("checked")
